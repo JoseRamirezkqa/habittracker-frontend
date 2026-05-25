@@ -12,9 +12,16 @@ export function Stats() {
   const [habitos, setHabitos] = useState<any[]>([]);
   const [registros, setRegistros] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     cargarDatos();
+    setIsDark(document.documentElement.classList.contains("dark"));
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
   }, []);
 
   const cargarDatos = async () => {
@@ -27,7 +34,6 @@ export function Stats() {
       const habitosData = await resHabitos.json();
       setHabitos(habitosData);
 
-      // Obtener registros de todos los hábitos
       const todosRegistros = await Promise.all(
         habitosData.map((h: any) =>
           fetch(`${API_URL}/registros/habito/${h.id}`)
@@ -43,7 +49,6 @@ export function Stats() {
     }
   };
 
-  // Datos para gráfica semanal
   const getWeeklyData = () => {
     const dias = ["L", "M", "M", "J", "V", "S", "D"];
     const hoy = new Date();
@@ -60,7 +65,6 @@ export function Stats() {
     });
   };
 
-  // Mapa de calor (últimos 42 días)
   const getHeatmapData = () => {
     const data = [];
     const hoy = new Date();
@@ -75,7 +79,6 @@ export function Stats() {
     return data;
   };
 
-  // Top hábitos por completaciones
   const getTopHabits = () => {
     const colores = [
       "from-green-400 to-emerald-500",
@@ -103,17 +106,23 @@ export function Stats() {
   const maxCompletions = Math.max(...topHabits.map((h) => h.completions), 1);
 
   const getHeatmapColor = (intensity: number) => {
+    if (isDark) {
+      return ["bg-gray-800", "bg-violet-900", "bg-violet-600", "bg-violet-400"][intensity];
+    }
     return ["bg-gray-100", "bg-violet-200", "bg-violet-400", "bg-violet-600"][intensity];
   };
 
+  const chartGridColor = isDark ? "#374151" : "#f0f0f0";
+  const chartTickColor = isDark ? "#9CA3AF" : "#666";
+
   if (cargando) return (
-    <div className="flex items-center justify-center min-h-screen">
-      <p className="text-gray-500">Cargando estadísticas...</p>
+    <div className="flex items-center justify-center min-h-screen dark:bg-gray-950">
+      <p className="text-gray-500 dark:text-gray-400">Cargando estadísticas...</p>
     </div>
   );
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
       <div className="max-w-2xl mx-auto">
         <div className="bg-gradient-to-r from-violet-600 to-orange-500 rounded-b-3xl shadow-xl p-6 pb-8">
           <h1 className="text-white text-2xl font-bold mb-2">Estadísticas</h1>
@@ -122,39 +131,39 @@ export function Stats() {
 
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white rounded-2xl p-4 shadow-md">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-400 to-purple-600 flex items-center justify-center">
                   <Trophy className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-xs text-gray-500 font-medium">Total</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Total</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{totalCompletados}</p>
-              <p className="text-xs text-gray-400">hábitos completados</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{totalCompletados}</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">hábitos completados</p>
             </div>
 
-            <div className="bg-white rounded-2xl p-4 shadow-md">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-xs text-gray-500 font-medium">Promedio</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Promedio</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{tasaExito}%</p>
-              <p className="text-xs text-gray-400">tasa de éxito</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{tasaExito}%</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">tasa de éxito</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-md">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
               <Target className="w-5 h-5 text-violet-600" />
-              <h2 className="font-bold text-gray-900">Semana actual</h2>
+              <h2 className="font-bold text-gray-900 dark:text-gray-100">Semana actual</h2>
             </div>
             <ResponsiveContainer width="100%" height={180}>
               <BarChart data={weeklyData} margin={{ left: -20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="day" tick={{ fontSize: 12, fill: "#666" }} axisLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: "#666" }} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={chartGridColor} />
+                <XAxis dataKey="day" tick={{ fontSize: 12, fill: chartTickColor }} axisLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: chartTickColor }} axisLine={false} />
                 <Bar dataKey="count" radius={[8, 8, 0, 0]}>
                   {weeklyData.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={index % 2 === 0 ? "url(#grad1)" : "url(#grad2)"} />
@@ -174,10 +183,10 @@ export function Stats() {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 shadow-md">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md">
             <div className="flex items-center gap-2 mb-4">
               <Award className="w-5 h-5 text-violet-600" />
-              <h2 className="font-bold text-gray-900">Mapa de actividad</h2>
+              <h2 className="font-bold text-gray-900 dark:text-gray-100">Mapa de actividad</h2>
             </div>
             <div className="grid grid-cols-7 gap-1.5">
               {heatmapData.map((day, index) => (
@@ -188,23 +197,23 @@ export function Stats() {
                 />
               ))}
             </div>
-            <div className="flex items-center gap-2 mt-4 text-xs text-gray-500">
+            <div className="flex items-center gap-2 mt-4 text-xs text-gray-500 dark:text-gray-400">
               <span>Menos</span>
               <div className="flex gap-1">
-                <div className="w-3 h-3 rounded bg-gray-100" />
-                <div className="w-3 h-3 rounded bg-violet-200" />
-                <div className="w-3 h-3 rounded bg-violet-400" />
-                <div className="w-3 h-3 rounded bg-violet-600" />
+                <div className="w-3 h-3 rounded bg-gray-100 dark:bg-gray-800" />
+                <div className="w-3 h-3 rounded bg-violet-200 dark:bg-violet-900" />
+                <div className="w-3 h-3 rounded bg-violet-400 dark:bg-violet-600" />
+                <div className="w-3 h-3 rounded bg-violet-600 dark:bg-violet-400" />
               </div>
               <span>Más</span>
             </div>
           </div>
 
           {topHabits.length > 0 && (
-            <div className="bg-white rounded-2xl p-6 shadow-md">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-violet-600" />
-                <h2 className="font-bold text-gray-900">Hábitos destacados</h2>
+                <h2 className="font-bold text-gray-900 dark:text-gray-100">Hábitos destacados</h2>
               </div>
               <div className="space-y-4">
                 {topHabits.map((habit, index) => (
@@ -214,11 +223,11 @@ export function Stats() {
                         <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${habit.color} flex items-center justify-center text-white font-bold text-sm`}>
                           {index + 1}
                         </div>
-                        <span className="font-medium text-gray-900">{habit.name}</span>
+                        <span className="font-medium text-gray-900 dark:text-gray-100">{habit.name}</span>
                       </div>
-                      <span className="text-sm font-semibold text-violet-600">{habit.completions}</span>
+                      <span className="text-sm font-semibold text-violet-600 dark:text-violet-400">{habit.completions}</span>
                     </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${habit.color} rounded-full`}
                         style={{ width: `${(habit.completions / maxCompletions) * 100}%` }}
