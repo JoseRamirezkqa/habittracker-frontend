@@ -36,7 +36,7 @@ export function Help() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
       <div className="max-w-[375px] mx-auto">
         <div className="bg-gradient-to-r from-violet-600 to-orange-500 rounded-b-3xl shadow-xl p-6 pb-8">
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-white mb-6 hover:opacity-80">
@@ -55,24 +55,24 @@ export function Help() {
         </div>
 
         <div className="p-6 space-y-4">
-          <h2 className="font-bold text-gray-900 text-lg">Preguntas frecuentes</h2>
+          <h2 className="font-bold text-gray-900 dark:text-gray-100 text-lg">Preguntas frecuentes</h2>
 
           <div className="space-y-3">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-md overflow-hidden">
+              <div key={index} className="bg-white dark:bg-gray-900 rounded-2xl shadow-md overflow-hidden">
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="w-full p-4 flex items-center justify-between text-left"
+                  className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <span className="font-medium text-gray-900 pr-4">{faq.pregunta}</span>
+                  <span className="font-medium text-gray-900 dark:text-gray-100 pr-4">{faq.pregunta}</span>
                   {expandido === index
-                    ? <ChevronUp className="w-5 h-5 text-violet-600 flex-shrink-0" />
-                    : <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    ? <ChevronUp className="w-5 h-5 text-violet-600 dark:text-violet-400 flex-shrink-0" />
+                    : <ChevronDown className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                   }
                 </button>
                 {expandido === index && (
                   <div className="px-4 pb-4">
-                    <p className="text-gray-600 text-sm leading-relaxed">{faq.respuesta}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">{faq.respuesta}</p>
                   </div>
                 )}
               </div>
@@ -83,7 +83,7 @@ export function Help() {
             <Button
               onClick={() => window.open("mailto:soporte@habittracker.com")}
               variant="outline"
-              className="w-full h-14 border-2 border-violet-300 text-violet-600 hover:bg-violet-50 font-bold rounded-2xl"
+              className="w-full h-14 border-2 border-violet-300 dark:border-violet-700 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 font-bold rounded-2xl"
             >
               <Mail className="w-5 h-5 mr-2" />
               Contactar soporte
