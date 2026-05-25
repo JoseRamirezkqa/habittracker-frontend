@@ -96,10 +96,10 @@ export function Profile() {
                 className="w-full bg-white  dark:bg-gray-900  dark:shadow-gray-900 rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-violet-600" />
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center dark:from-violet-900/50 dark:to-purple-900/50">
+                    <Icon className="w-5 h-5 text-violet-600 dark:text-violet-300" />
                   </div>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">{item.label}</span>
+                  <span className="font-medium text-gray-900 dark:text-gray-300">{item.label}</span>
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
               </button>
@@ -108,7 +108,7 @@ export function Profile() {
 
           <button
             onClick={handleLogout}
-            className="w-full bg-white rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow border-2 border-red-100"
+            className="w-full bg-white dark:bg-gray-900  dark:shadow-gray-900 rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow border-2 border-red-100"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
