@@ -55,17 +55,13 @@ export function Notifications() {
   const toggleGlobal = (valor: boolean) => {
     setGlobalEnabled(valor);
     localStorage.setItem("notificacionesGlobal", String(valor));
-
     if (!valor) {
-      // Guardar cuáles tenían notificación activa antes de desactivar
       const activos = habitos.filter((h) => h.notificacionActiva).map((h) => h.id);
       setHabitosAntesDeDesactivar(activos);
       localStorage.setItem("habitosActivos", JSON.stringify(activos));
     } else {
-      // Restaurar los que tenían notificación activa
       const guardados = JSON.parse(localStorage.getItem("habitosActivos") || "[]");
       setHabitosAntesDeDesactivar(guardados);
-      // Reactivar notificaciones en los hábitos que las tenían
       setHabitos((prev) =>
         prev.map((h) => guardados.includes(h.id) ? { ...h, notificacionActiva: true } : h)
       );
@@ -75,21 +71,16 @@ export function Notifications() {
   const toggleNotificacion = async (id: number) => {
     const habito = habitos.find((h) => h.id === id);
     if (!habito) return;
-
     const nuevaActiva = !habito.notificacionActiva;
     const nuevaHora = nuevaActiva ? habito.horaRecordatorio : null;
-
     setHabitos((prev) =>
       prev.map((h) => h.id === id ? { ...h, notificacionActiva: nuevaActiva } : h)
     );
-
-    // Actualizar lista de activos en localStorage
     const activos = habitos
       .map((h) => h.id === id ? { ...h, notificacionActiva: nuevaActiva } : h)
       .filter((h) => h.notificacionActiva)
       .map((h) => h.id);
     localStorage.setItem("habitosActivos", JSON.stringify(activos));
-
     try {
       await fetch(`${API_URL}/habitos/${id}`, {
         method: "PUT",
@@ -118,7 +109,7 @@ export function Notifications() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 pb-24">
+    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
       <div className="max-w-[375px] mx-auto">
         <div className="bg-gradient-to-r from-violet-600 to-orange-500 rounded-b-3xl shadow-xl p-6 pb-8">
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-white mb-6 hover:opacity-80">
@@ -137,18 +128,18 @@ export function Notifications() {
         </div>
 
         <div className="p-6 space-y-4">
-          <div className="bg-white rounded-2xl p-6 shadow-md">
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-bold text-gray-900">Activar notificaciones</p>
-                <p className="text-sm text-gray-500 mt-1">Recibe recordatorios para tus hábitos</p>
+                <p className="font-bold text-gray-900 dark:text-gray-100">Activar notificaciones</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Recibe recordatorios para tus hábitos</p>
               </div>
               <Switch checked={globalEnabled} onCheckedChange={toggleGlobal} />
             </div>
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-lg font-bold text-gray-900 px-1">Por hábito</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 px-1">Por hábito</h2>
             {habitos.map((habito) => {
               const Icon = iconMap[habito.icono] || Dumbbell;
               const cat = habito.categoria?.toLowerCase() || "ejercicio";
@@ -157,7 +148,7 @@ export function Notifications() {
                 : habitosAntesDeDesactivar.includes(habito.id);
 
               return (
-                <div key={habito.id} className={`bg-white rounded-2xl p-4 shadow-md ${!globalEnabled ? "opacity-50" : ""}`}>
+                <div key={habito.id} className={`bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-md ${!globalEnabled ? "opacity-50" : ""}`}>
                   <div className="flex items-start gap-4">
                     <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${categoryColors[cat] || categoryColors.ejercicio} flex items-center justify-center flex-shrink-0`}>
                       <Icon className="w-6 h-6 text-white" />
@@ -165,8 +156,8 @@ export function Notifications() {
                     <div className="flex-1 space-y-3">
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <h3 className="font-semibold text-gray-900">{habito.nombre}</h3>
-                          <p className="text-xs text-gray-500">{habito.categoria}</p>
+                          <h3 className="font-semibold text-gray-900 dark:text-gray-100">{habito.nombre}</h3>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{habito.categoria}</p>
                         </div>
                         <Switch
                           checked={estaActivo && globalEnabled}
@@ -176,12 +167,12 @@ export function Notifications() {
                       </div>
                       {habito.notificacionActiva && globalEnabled && (
                         <div className="space-y-2">
-                          <Label className="text-sm text-gray-600">Hora del recordatorio</Label>
+                          <Label className="text-sm text-gray-600 dark:text-gray-400">Hora del recordatorio</Label>
                           <Input
                             type="time"
                             value={habito.horaRecordatorio}
                             onChange={(e) => updateHora(habito.id, e.target.value)}
-                            className="h-10 rounded-xl border-gray-200"
+                            className="h-10 rounded-xl border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                           />
                         </div>
                       )}
@@ -192,18 +183,18 @@ export function Notifications() {
             })}
 
             {habitos.length === 0 && (
-              <p className="text-center text-gray-500 py-8">No tienes hábitos configurados aún</p>
+              <p className="text-center text-gray-500 dark:text-gray-400 py-8">No tienes hábitos configurados aún</p>
             )}
           </div>
 
-          <div className="bg-gradient-to-r from-violet-100 to-purple-100 rounded-2xl p-6 border border-violet-200">
+          <div className="bg-gradient-to-r from-violet-100 to-purple-100 dark:from-violet-950 dark:to-purple-950 rounded-2xl p-6 border border-violet-200 dark:border-violet-800">
             <div className="flex gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/50 flex items-center justify-center flex-shrink-0">
-                <Bell className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 rounded-xl bg-white/50 dark:bg-white/10 flex items-center justify-center flex-shrink-0">
+                <Bell className="w-5 h-5 text-violet-600 dark:text-violet-400" />
               </div>
               <div>
-                <p className="font-semibold text-violet-900 mb-1">💡 Consejo</p>
-                <p className="text-sm text-violet-800">
+                <p className="font-semibold text-violet-900 dark:text-violet-300 mb-1">💡 Consejo</p>
+                <p className="text-sm text-violet-800 dark:text-violet-400">
                   Las notificaciones te ayudan a mantener la constancia. Configura recordatorios en momentos del día que mejor se adapten a tu rutina.
                 </p>
               </div>
