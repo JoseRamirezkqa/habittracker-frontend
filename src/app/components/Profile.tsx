@@ -99,7 +99,7 @@ export function Profile() {
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
                     <Icon className="w-5 h-5 text-violet-600" />
                   </div>
-                  <span className="font-medium text-gray-900">{item.label}</span>
+                  <span className="font-medium text-gray-900 dark:text-gray-100">{item.label}</span>
                 </div>
                 <ChevronRight className="w-5 h-5 text-gray-400" />
               </button>
