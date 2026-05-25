@@ -124,15 +124,15 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
           </div>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 ">
           {/* Filtros sin scroll horizontal */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900">
             <div className="flex gap-2 flex-wrap">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-2 rounded-xl font-medium text-sm transition-all dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900 ${
+                  className={`px-3 py-2 rounded-xl font-medium text-sm transition-all  ${
                     selectedCategory === category
                       ? "bg-gradient-to-r from-violet-600 to-orange-500 text-white shadow-md"
                       : "bg-white text-gray-600 hover:bg-gray-50"
