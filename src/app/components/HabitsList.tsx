@@ -166,7 +166,7 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-gray-900 truncate">{habit.nombre}</h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className={`text-xs px-2 py-1 rounded-lg ${categoryBgColors[cat] || "bg-gray-100"} ${categoryTextColors[cat] || "text-gray-700"} font-medium`}>
+                          <span className={`dark:text-gray-100 text-xs px-2 py-1 rounded-lg ${categoryBgColors[cat] || "bg-gray-100"} ${categoryTextColors[cat] || "text-gray-700"} font-medium`}>
                             {habit.categoria}
                           </span>
                           <span className="text-xs text-gray-500">🔥 {habit.rachaActual} días</span>
