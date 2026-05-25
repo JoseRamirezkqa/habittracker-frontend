@@ -108,7 +108,7 @@ export function Profile() {
 
           <button
             onClick={handleLogout}
-            className="w-full bg-white dark:bg-gray-900  dark:shadow-gray-900 rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow border-2 border-red-100"
+            className="w-full bg-white dark:bg-gray-900 dark:border-input dark:shadow-gray-900 dark:hover:bg-red-950 rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow border-2 border-red-100"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-100 to-red-200 flex items-center justify-center">
