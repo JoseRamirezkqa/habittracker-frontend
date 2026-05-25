@@ -155,7 +155,7 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
                   <div
                     key={habit.id}
                     onClick={() => navigate(`/habit/${habit.id}`)}
-                    className={`bg-white rounded-2xl p-4 shadow-md border-2 cursor-pointer transition-all ${
+                    className={`bg-white rounded-2xl dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900 p-4 shadow-md border-2 cursor-pointer transition-all ${
                       habit.completadoHoy ? "border-green-400 bg-green-50" : "border-transparent hover:border-violet-200"
                     }`}
                   >
