@@ -93,7 +93,7 @@ export function Profile() {
               <button
                 key={index}
                 onClick={item.action}
-                className="w-full bg-white rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow"
+                className="w-full bg-white  dark:bg-gray-900  dark:shadow-gray-900 rounded-2xl p-4 shadow-md flex items-center justify-between hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-100 to-purple-100 flex items-center justify-center">
