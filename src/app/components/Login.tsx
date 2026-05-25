@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Sparkles } from "lucide-react";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -16,6 +17,37 @@ export function Login() {
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const userInfo = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        }).then((r) => r.json());
+
+        const res = await fetch(`${API_URL}/usuarios/google`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userInfo.email,
+            nombre: userInfo.name,
+            fotoUrl: userInfo.picture,
+          }),
+        });
+
+        if (res.ok) {
+          const usuario = await res.json();
+          localStorage.setItem("usuario", JSON.stringify(usuario));
+          navigate("/dashboard");
+        } else {
+          setError("Error al iniciar sesión con Google");
+        }
+      } catch {
+        setError("Error de conexión con Google");
+      }
+    },
+    onError: () => setError("Error al iniciar sesión con Google"),
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,8 +89,6 @@ export function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-violet-500 via-purple-500 to-orange-500 flex items-center justify-center p-6">
-      
-      {/* En PC: dos columnas. En celular: una columna */}
       <div className="w-full max-w-4xl flex flex-col md:flex-row gap-8 items-center">
 
         {/* Panel izquierdo — solo visible en PC */}
@@ -88,7 +118,7 @@ export function Login() {
 
         {/* Panel derecho — formulario */}
         <div className="w-full md:max-w-md bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-8 space-y-6">
-          
+
           {/* Logo solo en celular */}
           <div className="flex flex-col items-center md:hidden space-y-3">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-orange-500 flex items-center justify-center">
@@ -111,7 +141,10 @@ export function Login() {
           </div>
 
           {/* Botón Google */}
-          <Button className="w-full h-12 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl shadow-sm">
+          <Button
+            onClick={() => handleGoogleLogin()}
+            className="w-full h-12 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-2xl shadow-sm"
+          >
             <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
