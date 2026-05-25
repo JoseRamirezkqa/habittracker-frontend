@@ -132,7 +132,7 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900px-3 py-2 rounded-xl font-medium text-sm transition-all  ${
+                  className={`dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900 px-3 py-2 rounded-xl font-medium text-sm transition-all  ${
                     selectedCategory === category
                       ? "bg-gradient-to-r from-violet-600 to-orange-500 text-white shadow-md"
                       : "bg-white text-gray-600 hover:bg-gray-50"
