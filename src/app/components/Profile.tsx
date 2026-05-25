@@ -57,8 +57,8 @@ export function Profile() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 pb-24">
-      <div className="max-w-[375px] mx-auto">
+<div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
+      <div className="max-w-2xl mx-auto">
         <div className="bg-gradient-to-r from-violet-600 to-orange-500 rounded-b-3xl shadow-xl p-6 pb-8">
           <h1 className="text-white text-2xl font-bold mb-6">Mi Perfil</h1>
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">

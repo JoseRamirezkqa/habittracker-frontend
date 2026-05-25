@@ -13,12 +13,12 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe">
-      <div className="max-w-[375px] mx-auto flex justify-around items-center h-20 px-4">
+    <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 pb-safe">
+      <div className="max-w-2xl mx-auto flex justify-around items-center h-20 px-4">
         {navItems.map((item) => {
           const isActive = location.pathname === item.path;
           const Icon = item.icon;
-          
+
           return (
             <button
               key={item.label}
@@ -40,7 +40,7 @@ export function BottomNav() {
               </div>
               <span
                 className={`text-xs font-medium transition-colors ${
-                  isActive ? "text-violet-600" : "text-gray-400"
+                  isActive ? "text-violet-600 dark:text-violet-400" : "text-gray-400"
                 }`}
               >
                 {item.label}
