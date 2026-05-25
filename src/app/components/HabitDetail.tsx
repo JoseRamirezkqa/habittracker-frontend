@@ -159,7 +159,8 @@ export function HabitDetail() {
           <Button
             onClick={handleComplete}
             disabled={completadoHoy}
-            className={`w-full h-16 text-lg font-bold rounded-2xl shadow-lg ${
+            className={`w-full h-16 text-lg font-bold dark:text-gray-300 rounded-2xl shadow-lg ${
+              
               completadoHoy
                 ? "bg-green-500 hover:bg-green-500 cursor-not-allowed"
                 : "bg-gradient-to-r from-violet-600 to-orange-500"
