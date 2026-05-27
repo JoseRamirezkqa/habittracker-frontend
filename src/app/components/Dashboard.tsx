@@ -5,7 +5,7 @@ import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import {
   Flame, Dumbbell, Book, Heart, Briefcase,
-  Droplet, Moon, Check, Plus, Sparkles,
+  Droplet, Moon, Check, Plus, Sparkles, Trash2,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -91,6 +91,16 @@ export function Dashboard() {
       }
     } catch (e) {
       console.error("Error toggling hábito", e);
+    }
+  };
+
+  const eliminarHabit = async (id: number) => {
+    if (!window.confirm("¿Eliminar este hábito?")) return;
+    try {
+      await fetch(`${API_URL}/habitos/${id}`, { method: "DELETE" });
+      setHabits((prev) => prev.filter((h) => h.id !== id));
+    } catch (e) {
+      console.error("Error eliminando hábito", e);
     }
   };
 
@@ -212,7 +222,7 @@ export function Dashboard() {
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${categoryColors[cat] || categoryColors.ejercicio} flex items-center justify-center`}>
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${categoryColors[cat] || categoryColors.ejercicio} flex items-center justify-center flex-shrink-0`}>
                           <Icon className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -224,17 +234,25 @@ export function Dashboard() {
                             <span className="text-xs text-gray-500">🔥 {habit.rachaActual} días</span>
                           </div>
                         </div>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); toggleHabit(habit.id, habit.completadoHoy); }}
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                            habit.completadoHoy ? "bg-green-500" : "bg-gray-100 hover:bg-gray-200"
-                          }`}
-                        >
-                          {habit.completadoHoy
-                            ? <Check className="w-6 h-6 text-white" />
-                            : <div className="w-5 h-5 rounded-lg border-2 border-gray-400"></div>
-                          }
-                        </button>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleHabit(habit.id, habit.completadoHoy); }}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                              habit.completadoHoy ? "bg-green-500" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200"
+                            }`}
+                          >
+                            {habit.completadoHoy
+                              ? <Check className="w-6 h-6 text-white" />
+                              : <div className="w-5 h-5 rounded-lg border-2 border-gray-400"></div>
+                            }
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); eliminarHabit(habit.id); }}
+                            className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 dark:bg-red-950 hover:bg-red-200 transition-all"
+                          >
+                            <Trash2 className="w-5 h-5 text-red-500" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
