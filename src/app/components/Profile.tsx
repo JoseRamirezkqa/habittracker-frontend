@@ -81,8 +81,6 @@ export function Profile() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-white text-2xl font-bold mb-6">Mi Perfil</h1>
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 text-center">
-
-            {/* Avatar con lápiz */}
             <div className="relative inline-block mb-3">
               <div className="w-36 h-36 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center text-7xl border-4 border-white/50">
                 {avatarSeleccionado}
@@ -94,10 +92,8 @@ export function Profile() {
                 ✏️
               </div>
             </div>
-
             <h2 className="text-white text-xl font-bold mt-2">{usuario?.nombre || "Usuario"}</h2>
             <p className="text-white/80 text-sm">{usuario?.email || ""}</p>
-
             <div className="flex gap-4 justify-center mt-4">
               <div className="text-center">
                 <p className="text-white text-2xl font-bold">{habitos.length}</p>
