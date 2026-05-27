@@ -124,15 +124,15 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
           </div>
         </div>
 
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 ">
           {/* Filtros sin scroll horizontal */}
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap ">
             <div className="flex gap-2 flex-wrap">
               {categories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-2 rounded-xl font-medium text-sm transition-all ${
+                  className={`dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900 px-3 py-2 rounded-xl font-medium text-sm transition-all  ${
                     selectedCategory === category
                       ? "bg-gradient-to-r from-violet-600 to-orange-500 text-white shadow-md"
                       : "bg-white text-gray-600 hover:bg-gray-50"
@@ -155,7 +155,7 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
                   <div
                     key={habit.id}
                     onClick={() => navigate(`/habit/${habit.id}`)}
-                    className={`bg-white rounded-2xl p-4 shadow-md border-2 cursor-pointer transition-all ${
+                    className={`bg-white rounded-2xl dark:text-gray-300 dark:bg-gray-900 dark:shadow-gray-900 p-4 shadow-md border-2 cursor-pointer transition-all ${
                       habit.completadoHoy ? "border-green-400 bg-green-50" : "border-transparent hover:border-violet-200"
                     }`}
                   >
@@ -164,9 +164,9 @@ const toggleHabit = async (e: React.MouseEvent, habito: any) => {
                         <Icon className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 truncate">{habit.nombre}</h3>
+                        <h3 className="font-semibold text-gray-900 truncate dark:text-gray-100">{habit.nombre}</h3>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className={`text-xs px-2 py-1 rounded-lg ${categoryBgColors[cat] || "bg-gray-100"} ${categoryTextColors[cat] || "text-gray-700"} font-medium`}>
+                          <span className={` text-xs px-2 py-1 rounded-lg ${categoryBgColors[cat] || "bg-gray-100"} ${categoryTextColors[cat] || "text-gray-700"} font-medium`}>
                             {habit.categoria}
                           </span>
                           <span className="text-xs text-gray-500">🔥 {habit.rachaActual} días</span>
