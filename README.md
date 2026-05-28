@@ -112,9 +112,9 @@ Agregar screenshots aquí:
 ## 👨‍💻 Autor
 
 - Jose Ramirezkqa
+- Stiven Rey
+- María José Hernández
 
-GitHub:
-https://github.com/JoseRamirezkqa
 
 ---
 
