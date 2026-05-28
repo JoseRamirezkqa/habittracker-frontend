@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { BottomNav } from "./BottomNav";
+import { Progress } from "./ui/progress";
 import { Button } from "./ui/button";
 import {
   Flame, Dumbbell, Book, Heart, Briefcase,
-  Droplet, Moon, Check, Plus, Sparkles,
+  Droplet, Moon, Check, Plus, Sparkles, Trash2,
 } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -93,6 +94,16 @@ export function Dashboard() {
     }
   };
 
+  const eliminarHabit = async (id: number) => {
+    if (!window.confirm("¿Eliminar este hábito?")) return;
+    try {
+      await fetch(`${API_URL}/habitos/${id}`, { method: "DELETE" });
+      setHabits((prev) => prev.filter((h) => h.id !== id));
+    } catch (e) {
+      console.error("Error eliminando hábito", e);
+    }
+  };
+
   const completedCount = habits.filter((h) => h.completadoHoy).length;
   const progressPercentage = habits.length > 0 ? (completedCount / habits.length) * 100 : 0;
   const maxStreak = habits.length > 0 ? Math.max(...habits.map((h) => h.rachaActual)) : 0;
@@ -101,7 +112,7 @@ export function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-orange-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 pb-24">
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-violet-600 to-orange-500 rounded-b-3xl shadow-xl p-6 pb-8">
+      <div className="bg-gradient-to-r from-violet-600 to-orange-500 shadow-xl p-6 pb-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
@@ -122,6 +133,7 @@ export function Dashboard() {
               </div>
             </div>
           </div>
+          <Progress value={progressPercentage} className="h-2 bg-white/30 mt-4" />
         </div>
       </div>
 
@@ -132,32 +144,30 @@ export function Dashboard() {
           {/* Columna izquierda — resumen (solo PC) */}
           <div className="hidden md:flex flex-col gap-4 w-64 flex-shrink-0">
             <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-600 to-orange-500 flex items-center justify-center mx-auto mb-4">
-                <span className="text-xl font-bold text-white">{Math.round(progressPercentage)}%</span>
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-100 to-orange-100 flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl font-bold text-violet-600">{Math.round(progressPercentage)}%</span>
               </div>
-              <p className="text-center text-gray-500 dark:text-gray-400 text-sm">Completado hoy</p>
+              <p className="text-center text-gray-500 text-sm">Completado hoy</p>
             </div>
-
             <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 shadow-md space-y-3">
               <h3 className="font-bold text-gray-900 dark:text-gray-100">Resumen</h3>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">Total hábitos</span>
+                <span className="text-gray-500">Total hábitos</span>
                 <span className="font-bold text-gray-900 dark:text-gray-100">{habits.length}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">Completados</span>
+                <span className="text-gray-500">Completados</span>
                 <span className="font-bold text-green-600">{completedCount}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">Pendientes</span>
+                <span className="text-gray-500">Pendientes</span>
                 <span className="font-bold text-orange-500">{habits.length - completedCount}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-500 dark:text-gray-400">Racha máxima</span>
+                <span className="text-gray-500">Racha máxima</span>
                 <span className="font-bold text-violet-600">{maxStreak} días</span>
               </div>
             </div>
-
             <Button
               onClick={() => navigate("/add-habit")}
               className="w-full h-12 bg-gradient-to-r from-violet-600 to-orange-500 text-white font-bold rounded-2xl"
@@ -179,7 +189,7 @@ export function Dashboard() {
             </div>
 
             {cargando ? (
-              <p className="text-center text-gray-500 dark:text-gray-400 py-8">Cargando hábitos...</p>
+              <p className="text-center text-gray-500 py-8">Cargando hábitos...</p>
             ) : habits.length === 0 ? (
               <div className="bg-white dark:bg-gray-900 rounded-2xl p-12 shadow-md text-center space-y-6">
                 <div className="flex justify-center">
@@ -208,13 +218,11 @@ export function Dashboard() {
                       key={habit.id}
                       onClick={() => navigate(`/habit/${habit.id}`)}
                       className={`bg-white dark:bg-gray-900 rounded-2xl p-4 shadow-md border-2 cursor-pointer transition-all ${
-                        habit.completadoHoy
-                          ? "border-green-400 bg-green-50 dark:bg-green-950"
-                          : "border-transparent hover:border-violet-200 dark:hover:border-violet-800"
+                        habit.completadoHoy ? "border-green-400 bg-green-50 dark:bg-green-950" : "border-transparent hover:border-violet-200"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${categoryColors[cat] || categoryColors.ejercicio} flex items-center justify-center`}>
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${categoryColors[cat] || categoryColors.ejercicio} flex items-center justify-center flex-shrink-0`}>
                           <Icon className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
@@ -223,20 +231,28 @@ export function Dashboard() {
                             <span className={`text-xs px-2 py-1 rounded-lg ${categoryBgColors[cat] || "bg-gray-100"} ${categoryTextColors[cat] || "text-gray-700"} font-medium`}>
                               {habit.categoria}
                             </span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400">🔥 {habit.rachaActual} días</span>
+                            <span className="text-xs text-gray-500">🔥 {habit.rachaActual} días</span>
                           </div>
                         </div>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); toggleHabit(habit.id, habit.completadoHoy); }}
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                            habit.completadoHoy ? "bg-green-500" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
-                          }`}
-                        >
-                          {habit.completadoHoy
-                            ? <Check className="w-6 h-6 text-white" />
-                            : <div className="w-5 h-5 rounded-lg border-2 border-gray-400 dark:border-gray-600"></div>
-                          }
-                        </button>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleHabit(habit.id, habit.completadoHoy); }}
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                              habit.completadoHoy ? "bg-green-500" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200"
+                            }`}
+                          >
+                            {habit.completadoHoy
+                              ? <Check className="w-6 h-6 text-white" />
+                              : <div className="w-5 h-5 rounded-lg border-2 border-gray-400"></div>
+                            }
+                          </button>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); eliminarHabit(habit.id); }}
+                            className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-100 dark:bg-red-950 hover:bg-red-200 transition-all"
+                          >
+                            <Trash2 className="w-5 h-5 text-red-500" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   );
@@ -253,7 +269,7 @@ export function Dashboard() {
           <div className="relative bg-white dark:bg-gray-900 rounded-3xl p-8 text-center shadow-2xl w-full max-w-sm">
             <p className="text-5xl mb-4">🎉</p>
             <p className="text-gray-900 dark:text-gray-100 font-bold text-xl mb-2">¡Racha activa!</p>
-            <p className="text-gray-500 dark:text-gray-400 text-sm">¡Sigue así, lo estás haciendo genial!</p>
+            <p className="text-gray-500 text-sm">¡Sigue así, lo estás haciendo genial!</p>
             <button
               onClick={() => setShowCelebration(false)}
               className="mt-6 w-full py-3 bg-gradient-to-r from-violet-600 to-orange-500 text-white font-bold rounded-2xl"
